@@ -36,30 +36,30 @@ Amna — Streamlit & Deployment
 
 ## 1. Data Understanding
 
-- [ ] Load the raw dataset
-- [ ] Check dataset shape
-- [ ] Inspect column names
-- [ ] Check data types
-- [ ] Understand each feature
-- [ ] Identify the target variable
+- [X] Load the raw dataset
+- [X] Check dataset shape
+- [X] Inspect column names
+- [X] Check data types
+- [X] Understand each feature
+- [X] Identify the target variable
 
 ## 2. Data Cleaning
 
-- [ ] Check missing values
-- [ ] Check duplicate rows
-- [ ] Check invalid values
-- [ ] Check negative/impossible values
-- [ ] Check numerical ranges
-- [ ] Check categorical values
-- [ ] Detect outliers
-- [ ] Decide how to handle outliers
-- [ ] Document all cleaning decisions
+- [X] Check missing values
+- [X] Check duplicate rows
+- [X] Check invalid values
+- [X] Check negative/impossible values
+- [X] Check numerical ranges
+- [X] Check categorical values
+- [X] Detect outliers
+- [X] Decide how to handle outliers
+- [X] Document all cleaning decisions
 
 ## 3. Preprocessing
 
 - [ ] Separate features `X` and target `y`
-- [ ] Identify numerical features
-- [ ] Identify categorical features
+- [X] Identify numerical features
+- [X] Identify categorical features
 - [ ] Encode categorical variables
 - [ ] Apply required scaling/transformation
 - [ ] Perform train/test split
