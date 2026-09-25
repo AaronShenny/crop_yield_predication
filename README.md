@@ -1,4 +1,4 @@
-# 🌾 Crop Yield Prediction — Team TODO
+# 🌾 Crop Yield Prediction — Final Team Tasks
 
 **Team:** Aaron • Emmanuel • Nofiya • Ganga • Amna  
 **Project Type:** Regression + EDA + Streamlit  
@@ -6,11 +6,36 @@
 
 ---
 
-# 👥 Team Task Breakdown
+# 🔄 Project Workflow
 
-## 👨‍💻 AARON — Data Cleaning & Preprocessing
+```text
+Raw Dataset
+    ↓
+Aaron — Data Cleaning & Preprocessing
+    ↓
+Clean Dataset
+    ↓
+Emmanuel — EDA
+    ↓
+EDA Findings
+    ↓
+Nofiya — Feature Engineering & Feature Selection
+    ↓
+Final Feature Set
+    ↓
+Ganga — Multiple Linear Regression & Evaluation
+    ↓
+Final Model
+    ↓
+Amna — Streamlit & Deployment
+```
 
-### Data Understanding
+---
+
+# 👨‍💻 AARON — Data Cleaning & Preprocessing
+
+## 1. Data Understanding
+
 - [ ] Load the raw dataset
 - [ ] Check dataset shape
 - [ ] Inspect column names
@@ -18,7 +43,8 @@
 - [ ] Understand each feature
 - [ ] Identify the target variable
 
-### Data Cleaning
+## 2. Data Cleaning
+
 - [ ] Check missing values
 - [ ] Check duplicate rows
 - [ ] Check invalid values
@@ -29,18 +55,19 @@
 - [ ] Decide how to handle outliers
 - [ ] Document all cleaning decisions
 
-### Preprocessing
+## 3. Preprocessing
+
 - [ ] Separate features `X` and target `y`
 - [ ] Identify numerical features
 - [ ] Identify categorical features
-- [ ] Encode categorical features
+- [ ] Encode categorical variables
+- [ ] Apply required scaling/transformation
 - [ ] Perform train/test split
-- [ ] Apply scaling where required
 - [ ] Prevent data leakage
-- [ ] Build reusable preprocessing pipeline
-- [ ] Save processed dataset
+- [ ] Build a reusable preprocessing pipeline
 
-### Deliverables
+## 4. Deliverables
+
 - [ ] `01_data_cleaning.ipynb`
 - [ ] `preprocessing.py`
 - [ ] Cleaned dataset
@@ -50,27 +77,31 @@
 
 # 📊 EMMANUEL — Exploratory Data Analysis
 
-## Dataset Overview
+## 1. Dataset Overview
+
 - [ ] Dataset shape
 - [ ] Summary statistics
 - [ ] Data types
-- [ ] Missing-value visualization
+- [ ] Missing-value analysis
 - [ ] Unique-value analysis
 
-## Univariate Analysis
+## 2. Univariate Analysis
+
 - [ ] Rainfall distribution
 - [ ] Temperature distribution
 - [ ] Fertilizer distribution
 - [ ] Crop-yield distribution
 - [ ] Boxplots for numerical variables
 
-## Categorical Analysis
+## 3. Categorical Analysis
+
 - [ ] Region distribution
 - [ ] Soil type distribution
 - [ ] Crop type distribution
 - [ ] Irrigation distribution
 
-## Relationship Analysis
+## 4. Relationship Analysis
+
 - [ ] Rainfall vs crop yield
 - [ ] Temperature vs crop yield
 - [ ] Fertilizer vs crop yield
@@ -79,108 +110,138 @@
 - [ ] Region vs yield
 - [ ] Irrigation vs yield
 
-## Correlation & Insights
-- [ ] Correlation matrix
-- [ ] Identify strongly related features
-- [ ] Identify possible multicollinearity
+## 5. Correlation & Insights
+
+- [ ] Create correlation matrix
+- [ ] Identify important relationships
+- [ ] Identify possible redundant/highly related features
 - [ ] Write 5–10 meaningful EDA findings
 - [ ] Select presentation-ready visualizations
 
-### Deliverables
+## 6. Handoff to Nofiya
+
+- [ ] Share important EDA findings
+- [ ] Share useful relationships between variables
+- [ ] Point out potentially useful or redundant features
+
+## 7. Deliverables
+
 - [ ] `02_EDA.ipynb`
 - [ ] EDA graphs
 - [ ] EDA findings
-- [ ] Visualizations for presentation
-- [ ] EDA section for Streamlit
+- [ ] Presentation visualizations
+- [ ] EDA material for Streamlit
 
 ---
 
-# 🧠 NOFIYA — Feature Engineering & RFE
+# 🧠 NOFIYA — Feature Engineering & Feature Selection
 
-## Feature Engineering
-- [ ] Review existing features
-- [ ] Identify useful derived features
-- [ ] Test rainfall-related features
-- [ ] Test fertilizer-related features
-- [ ] Test temperature-related features
-- [ ] Check whether engineered features improve performance
-- [ ] Remove unnecessary engineered features
+> **Main responsibility:** Turn the EDA findings into a useful final feature set for modelling.
 
-## Feature Selection
-- [ ] Analyze feature correlation
-- [ ] Check multicollinearity
-- [ ] Calculate VIF where appropriate
-- [ ] Run RFE
-- [ ] Identify selected features
-- [ ] Record RFE rankings
-- [ ] Compare full feature set vs RFE feature set
+## 1. Review Existing Features
 
-## Analysis
-- [ ] Generate feature-importance analysis where applicable
-- [ ] Document why selected features were retained
-- [ ] Provide final feature list to Ganga
+- [ ] Review Aaron's cleaned dataset
+- [ ] Review Emmanuel's EDA findings
+- [ ] Understand the available numerical and categorical features
+- [ ] Identify potentially useful features
+- [ ] Identify potentially redundant features
 
-### Deliverables
+## 2. Feature Engineering
+
+- [ ] Identify meaningful derived features
+- [ ] Test rainfall-related derived features
+- [ ] Test fertilizer-related derived features
+- [ ] Test temperature-related derived features
+- [ ] Compare model input before and after feature creation
+- [ ] Remove engineered features that do not help
+- [ ] Document every engineered feature and its purpose
+
+## 3. Feature Transformation
+
+- [ ] Check numerical feature distributions
+- [ ] Identify skewed features where relevant
+- [ ] Apply appropriate scaling/transformation where required
+- [ ] Compare results before and after transformation
+- [ ] Document transformation decisions
+
+## 4. Feature Selection
+
+- [ ] Analyze feature relationships/correlations
+- [ ] Check for redundant or highly related features
+- [ ] Select relevant features for modelling
+- [ ] Compare full feature set vs selected feature set
+- [ ] Document why features were retained or removed
+
+## 5. Final Handoff to Ganga
+
+- [ ] Prepare final feature list
+- [ ] Document engineered features
+- [ ] Document transformations
+- [ ] Provide final modelling dataset/input structure
+
+## 6. Deliverables
+
 - [ ] `03_feature_engineering.ipynb`
 - [ ] Feature-engineering results
-- [ ] RFE results
-- [ ] Selected feature list
-- [ ] Feature-analysis visuals
+- [ ] Feature-selection results
+- [ ] Final feature list
+- [ ] Feature-analysis visualizations
+- [ ] Feature-engineering summary
 
 ---
 
-# 🤖 GANGA — Regression Models & Evaluation
+# 🤖 GANGA — Regression & Model Evaluation
 
-## Required Models
-- [ ] Multiple Linear Regression
-- [ ] Polynomial Regression
-- [ ] Ridge Regression
-- [ ] Lasso Regression
-- [ ] ElasticNet Regression
-- [ ] RFE + Regression
+## 1. Model Preparation
 
-## Model Preparation
-- [ ] Use the agreed preprocessing pipeline
-- [ ] Use the same train/test split
-- [ ] Train all models consistently
-- [ ] Record training and test performance
+- [ ] Receive final feature set from Nofiya
+- [ ] Use Aaron's preprocessing pipeline
+- [ ] Use the agreed train/test split
+- [ ] Prepare training and testing data
 
-## Evaluation
-- [ ] MAE
-- [ ] MSE
-- [ ] RMSE
-- [ ] R² Score
+## 2. Regression Model
 
-## Cross-Validation
-- [ ] Perform 5-fold cross-validation
-- [ ] Record mean CV score
-- [ ] Record score variation
+- [ ] Train Multiple Linear Regression
+- [ ] Generate Polynomial Regression, Ridge, Lasso, ElasticNet
+- [ ] Generate predictions on training data
+- [ ] Generate predictions on test data
 
-## Hyperparameter Tuning
-- [ ] Tune Polynomial Regression degree
-- [ ] Tune Ridge `alpha`
-- [ ] Tune Lasso `alpha`
-- [ ] Tune ElasticNet `alpha`
-- [ ] Tune ElasticNet `l1_ratio`
-- [ ] Compare tuned vs default models
+## 3. Evaluation Metrics
 
-## Model Comparison
-- [ ] Create final comparison table
-- [ ] Compare MAE
-- [ ] Compare RMSE
-- [ ] Compare R²
-- [ ] Check overfitting
-- [ ] Select final model based on documented criteria
+- [ ] Calculate MAE
+- [ ] Calculate MSE
+- [ ] Calculate RMSE
+- [ ] Calculate R² Score
 
-## Optional Extra
-- [ ] Train Random Forest Regressor or Gradient Boosting Regressor
-- [ ] Compare nonlinear model with linear models
+## 4. Model Analysis
 
-### Deliverables
+- [ ] Compare training vs test performance
+- [ ] Check for overfitting
+- [ ] Check for underfitting
+- [ ] Analyze prediction errors/residuals
+- [ ] Perform cross-validation
+- [ ] Record cross-validation results
+
+## 5. Feature Set Comparison
+
+- [ ] Evaluate full feature set
+- [ ] Evaluate Nofiya's selected feature set
+- [ ] Compare performance
+- [ ] Document the effect of feature selection
+
+## 6. Final Model
+
+- [ ] Finalize the model using documented criteria
+- [ ] Save the final trained model
+- [ ] Document model configuration
+- [ ] Provide model file to Amna
+
+## 7. Deliverables
+
 - [ ] `04_model_training.ipynb`
-- [ ] Model comparison table
+- [ ] Model evaluation results
 - [ ] Cross-validation results
-- [ ] Hyperparameter results
+- [ ] Feature-set comparison
 - [ ] Saved final model
 - [ ] Final model explanation
 
@@ -188,23 +249,26 @@
 
 # 🎨 AMNA — Streamlit & Deployment
 
-## Application Structure
+## 1. Application Structure
+
 - [ ] Create Streamlit project
 - [ ] Create Home page
 - [ ] Create Dataset Overview page
 - [ ] Create EDA page
-- [ ] Create Model Comparison page
+- [ ] Create Model Results page
 - [ ] Create Prediction page
 
-## Dataset Page
+## 2. Dataset Overview
+
 - [ ] Show dataset size
 - [ ] Show feature names
 - [ ] Show target variable
 - [ ] Show dataset preview
 - [ ] Show feature descriptions
 
-## EDA Dashboard
-- [ ] Add yield distribution
+## 3. EDA Dashboard
+
+- [ ] Add crop-yield distribution
 - [ ] Add crop comparison
 - [ ] Add region comparison
 - [ ] Add soil comparison
@@ -213,36 +277,62 @@
 - [ ] Add temperature vs yield
 - [ ] Add fertilizer vs yield
 
-## Model Comparison
-- [ ] Display model names
+## 4. Model Results
+
+- [ ] Display model information
 - [ ] Display MAE
+- [ ] Display MSE
 - [ ] Display RMSE
 - [ ] Display R²
-- [ ] Highlight final selected model
+- [ ] Display cross-validation results
 
-## Prediction
-- [ ] Region input
-- [ ] Soil type input
-- [ ] Crop type input
-- [ ] Rainfall input
-- [ ] Temperature input
-- [ ] Fertilizer input
-- [ ] Irrigation input
-- [ ] Input validation
+## 5. Prediction Page
+
+### Inputs
+
+- [ ] Region
+- [ ] Soil type
+- [ ] Crop type
+- [ ] Rainfall
+- [ ] Temperature
+- [ ] Fertilizer
+- [ ] Irrigation
+
+### Prediction Flow
+
+```text
+User Input
+    ↓
+Preprocessing Pipeline
+    ↓
+Feature Engineering / Transformation
+    ↓
+Final Model
+    ↓
+Predicted Crop Yield
+```
+
+- [ ] Add input validation
 - [ ] Load preprocessing pipeline
 - [ ] Load saved model
+- [ ] Apply required feature transformations
 - [ ] Generate prediction
 - [ ] Display predicted yield in tonnes/ha
 
-## Deployment
+## 6. Deployment
+
 - [ ] Create `requirements.txt`
 - [ ] Test application locally
+- [ ] Connect final model
+- [ ] Connect preprocessing pipeline
+- [ ] Test prediction flow
 - [ ] Fix deployment issues
 - [ ] Deploy to Streamlit Community Cloud
 - [ ] Test public URL
 - [ ] Share working application link
 
-### Deliverables
+## 7. Deliverables
+
 - [ ] `streamlit_app.py`
 - [ ] `requirements.txt`
 - [ ] Streamlit application
@@ -261,12 +351,13 @@
 - [ ] Data Cleaning
 - [ ] Exploratory Data Analysis
 - [ ] Feature Engineering
-- [ ] RFE
+- [ ] Feature Selection
 - [ ] Methodology
-- [ ] Regression Models
+- [ ] Regression Model
 - [ ] Evaluation Metrics
+- [ ] Cross-Validation
 - [ ] Results
-- [ ] Model Comparison
+- [ ] Model Analysis
 - [ ] Streamlit Application
 - [ ] Deployment
 - [ ] Limitations
@@ -285,126 +376,74 @@
 - [ ] Dataset
 - [ ] Data-cleaning process
 - [ ] EDA findings
+- [ ] Important visualizations
 - [ ] Feature engineering
-- [ ] RFE
-- [ ] Regression models
+- [ ] Feature selection
+- [ ] Regression methodology
 - [ ] Evaluation metrics
-- [ ] Model comparison
-- [ ] Final model
+- [ ] Model results
+- [ ] Overfitting/underfitting analysis
 - [ ] Streamlit application
-- [ ] Live/demo screenshots
-- [ ] Results
+- [ ] Live prediction demonstration
+- [ ] Deployment
 - [ ] Conclusion
-- [ ] Future scope
 
 ---
 
-# 🔧 FINAL INTEGRATION
+# 🔗 TEAM HANDOFF CHECKLIST
 
-- [ ] All notebooks run without errors
-- [ ] No hard-coded local paths
-- [ ] Preprocessing is reproducible
-- [ ] Same preprocessing is used during training and prediction
-- [ ] No data leakage
-- [ ] Final model is saved correctly
-- [ ] Streamlit loads the correct model
-- [ ] Streamlit uses the correct preprocessing pipeline
-- [ ] Test valid inputs
-- [ ] Test invalid inputs
-- [ ] Test missing inputs
-- [ ] Test extreme values
-- [ ] Check prediction output
-- [ ] Check model metrics
-- [ ] Check Streamlit deployment
-- [ ] README completed
-- [ ] Installation instructions added
-- [ ] Dataset source added
-- [ ] Model methodology documented
-- [ ] Streamlit link added
-- [ ] Team contributions documented
+## Aaron → Emmanuel
 
----
+- [ ] Cleaned dataset shared
+- [ ] Data-cleaning decisions documented
 
-# 📁 Recommended GitHub Structure
+## Emmanuel → Nofiya
 
-```text
-crop-yield-ml/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
-│   ├── 01_data_cleaning.ipynb
-│   ├── 02_EDA.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   └── 04_model_training.ipynb
-├── src/
-│   ├── preprocessing.py
-│   ├── feature_engineering.py
-│   └── models.py
-├── models/
-│   └── final_model.pkl
-├── app/
-│   └── streamlit_app.py
-├── reports/
-├── requirements.txt
-└── README.md
-```
+- [ ] EDA notebook shared
+- [ ] Important relationships shared
+- [ ] Important findings shared
+- [ ] Potentially useful/redundant features identified
+
+## Nofiya → Ganga
+
+- [ ] Final feature list shared
+- [ ] Engineered features documented
+- [ ] Transformations documented
+- [ ] Final input structure shared
+
+## Ganga → Amna
+
+- [ ] Final model saved
+- [ ] Model metrics shared
+- [ ] Final feature order shared
+- [ ] Preprocessing/model loading instructions shared
+
+## Amna → Team
+
+- [ ] Streamlit app working locally
+- [ ] Prediction flow working
+- [ ] Deployment completed
+- [ ] Public URL tested
 
 ---
 
-# 📈 PROJECT TRACKER
+# ✅ FINAL TEAM CHECK
 
-| Task | Owner | Status |
-|---|---|---|
-| Dataset audit | Aaron | ☐ |
-| Data cleaning | Aaron | ☐ |
-| Preprocessing pipeline | Aaron | ☐ |
-| EDA | Emmanuel | ☐ |
-| EDA insights | Emmanuel | ☐ |
-| EDA Streamlit section | Emmanuel + Amna | ☐ |
-| Feature engineering | Nofiya | ☐ |
-| RFE | Nofiya | ☐ |
-| Feature analysis | Nofiya | ☐ |
-| Linear Regression | Ganga | ☐ |
-| Polynomial Regression | Ganga | ☐ |
-| Ridge | Ganga | ☐ |
-| Lasso | Ganga | ☐ |
-| ElasticNet | Ganga | ☐ |
-| RFE + Regression | Ganga | ☐ |
-| Cross-validation | Ganga | ☐ |
-| Hyperparameter tuning | Ganga | ☐ |
-| Model comparison | Ganga | ☐ |
-| Streamlit UI | Amna | ☐ |
-| Streamlit integration | Amna + Aaron | ☐ |
-| Deployment | Amna | ☐ |
-| Report | Everyone | ☐ |
-| Presentation | Everyone | ☐ |
-| Final testing | Everyone | ☐ |
+- [ ] All notebooks completed
+- [ ] All outputs saved
+- [ ] Preprocessing and model pipeline tested end-to-end
+- [ ] Final feature order verified
+- [ ] Final model verified
+- [ ] Streamlit prediction verified
+- [ ] Report completed
+- [ ] Presentation completed
+- [ ] GitHub repository cleaned and organized
+- [ ] Final application URL tested
 
 ---
 
-# 🚦 Recommended Order
+## 📌 Important Scope Note
 
-1. **Aaron** → Data Cleaning
-2. **Emmanuel** → EDA
-3. **Nofiya** → Feature Engineering + RFE
-4. **Ganga** → Models + Evaluation
-5. **Amna** → Streamlit Integration + Deployment
-6. **Everyone** → Report + Presentation + Final Testing
+This project plan stays focused on the concepts covered in the training material: data cleaning, preprocessing, feature engineering, feature selection, feature transformation, data splitting, linear/multiple linear regression, evaluation, cross-validation, and overfitting/underfitting.
 
-## Definition of Done
-
-- [ ] Clean dataset finalized
-- [ ] EDA completed with written findings
-- [ ] Feature engineering documented
-- [ ] RFE completed
-- [ ] All required regression models trained
-- [ ] Models evaluated using MAE, MSE, RMSE and R²
-- [ ] Cross-validation/tuning completed
-- [ ] Final model selected and saved
-- [ ] Streamlit application works
-- [ ] Application deployed
-- [ ] Working link tested
-- [ ] Report finalized
-- [ ] Presentation finalized
-- [ ] GitHub repository clean and reproducible
+Advanced techniques such as **RFE, VIF, Ridge, Lasso, ElasticNet, and extensive hyperparameter tuning are not mandatory in this final task plan** unless the instructor separately requires them.
