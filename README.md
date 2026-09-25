@@ -60,11 +60,11 @@ Amna — Streamlit & Deployment
 - [ ] Separate features `X` and target `y`
 - [X] Identify numerical features
 - [X] Identify categorical features
-- [ ] Encode categorical variables
-- [ ] Apply required scaling/transformation
+- [X] Encode categorical variables
+- [X] Apply required scaling/transformation
 - [ ] Perform train/test split
-- [ ] Prevent data leakage
-- [ ] Build a reusable preprocessing pipeline
+- [X] Prevent data leakage
+
 
 ## 4. Deliverables
 
