@@ -8,9 +8,32 @@ st.set_page_config(
     page_icon="🌾",
     layout="wide"
 )
-# Load dataset
+
+# Load dataset, model, and scaler
 df = pd.read_csv("crop_yield_dataset (1).csv")
 model = joblib.load("crop_yield_model (1).pkl")
+scaler = joblib.load("scaler (1).pkl")  # <-- must be saved from the notebook (see note at bottom)
+
+# Columns that were standardized during training (must match the notebook exactly,
+# in the same order used when the scaler was fit)
+NUMERICAL_COLS = [
+    "Rainfall_mm",
+    "Temperature_C",
+    "Soil_pH",
+    "Fertilizer_kg_per_ha",
+    "Pesticide_kg_per_ha",
+    "Sunlight_Hours_per_day",
+    "Farm_Size_ha",
+]
+
+# Full feature order the model expects (must match X.columns from training)
+MODEL_FEATURE_ORDER = [
+    "Rainfall_mm", "Temperature_C", "Soil_pH", "Fertilizer_kg_per_ha",
+    "Pesticide_kg_per_ha", "Sunlight_Hours_per_day", "Farm_Size_ha",
+    "Soil_Type_Loamy", "Soil_Type_Peaty", "Soil_Type_Sandy", "Soil_Type_Silty",
+    "Crop_Type_Cotton", "Crop_Type_Maize", "Crop_Type_Rice",
+    "Crop_Type_Soybean", "Crop_Type_Wheat", "Irrigation_Yes"
+]
 
 # Main title
 st.title("🌾 Crop Yield Prediction")
@@ -68,6 +91,7 @@ elif page == "EDA Dashboard":
     irrigation_yield = df.groupby("Irrigation")["Crop_Yield_tonnes_per_ha"].mean()
 
     st.bar_chart(irrigation_yield)
+
     st.subheader("🌧️ Rainfall vs Crop Yield")
 
     st.scatter_chart(
@@ -100,7 +124,7 @@ elif page == "Model Performance":
         "for crop yield prediction:"
     )
 
-    models = [
+    model_names = [
         "Multiple Linear Regression",
         "Polynomial Regression",
         "Ridge Regression",
@@ -108,8 +132,8 @@ elif page == "Model Performance":
         "ElasticNet Regression"
     ]
 
-    for model in models:
-        st.write("✅", model)
+    for name in model_names:
+        st.write("✅", name)
 
     st.subheader("📏 Evaluation Metrics")
 
@@ -170,14 +194,17 @@ elif page == "Prediction":
             min_value=0.0
         )
 
+        # Include ALL soil/crop categories, including the ones dropped as the
+        # baseline during one-hot encoding (Clay, Barley) — selecting them
+        # correctly produces all-zero dummy flags below.
         soil_type = st.selectbox(
             "🌱 Soil Type",
-            ["Loamy", "Peaty", "Sandy", "Silty"]
+            ["Clay", "Loamy", "Peaty", "Sandy", "Silty"]
         )
 
         crop_type = st.selectbox(
             "🌾 Crop Type",
-            ["Cotton", "Maize", "Rice", "Soybean", "Wheat"]
+            ["Barley", "Cotton", "Maize", "Rice", "Soybean", "Wheat"]
         )
 
         irrigation = st.selectbox(
@@ -209,6 +236,14 @@ elif page == "Prediction":
 
             "Irrigation_Yes": [1 if irrigation == "Yes" else 0]
         })
+
+        # Scale the numeric columns using the SAME fitted scaler used in training.
+        # Without this, the model receives raw values on a totally different
+        # scale than it was trained on, producing meaningless predictions.
+        input_data[NUMERICAL_COLS] = scaler.transform(input_data[NUMERICAL_COLS])
+
+        # Ensure column order exactly matches what the model was trained on
+        input_data = input_data[MODEL_FEATURE_ORDER]
 
         # Make prediction
         prediction = model.predict(input_data)
@@ -257,7 +292,8 @@ elif page == "Prediction":
             st.write(f"🌱 **Soil Type:** {soil_type}")
             st.write(f"🌾 **Crop Type:** {crop_type}")
             st.write(f"💧 **Irrigation:** {irrigation}")
-            st.subheader("💡 Farming Suggestions")
+
+        st.subheader("💡 Farming Suggestions")
 
         if rainfall < 500:
             st.write("🌧️ Rainfall is relatively low. Consider proper irrigation.")
@@ -288,6 +324,7 @@ elif page == "Prediction":
 
         else:
             st.write("🧪 Fertilizer input has been provided.")
+
         st.subheader("📥 Download Prediction Report")
 
         report = f"""
