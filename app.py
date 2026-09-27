@@ -10,9 +10,9 @@ st.set_page_config(
 )
 
 # Load dataset, model, and scaler
-df = pd.read_csv("crop_yield_dataset (1).csv")
-model = joblib.load("crop_yield_model (1).pkl")
-scaler = joblib.load("scaler (1).pkl")  # <-- must be saved from the notebook (see note at bottom)
+df = pd.read_csv("cleaned.csv")
+model = joblib.load("crop_yield_model.pkl")
+scaler = joblib.load("scaler.pkl")   # once you've saved and added this file # <-- must be saved from the notebook (see note at bottom)
 
 # Columns that were standardized during training (must match the notebook exactly,
 # in the same order used when the scaler was fit)
