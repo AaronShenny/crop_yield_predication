@@ -1,322 +1,92 @@
-import streamlit as st
-import pandas as pd
 import joblib
+import pandas as pd
+import streamlit as st
 
-# Page settings
-st.set_page_config(
-    page_title="Crop Yield Prediction",
-    page_icon="🌾",
-    layout="wide"
-)
-# Load dataset
-df = pd.read_csv("crop_yield_dataset (1).csv")
-model = joblib.load("crop_yield_model (1).pkl")
+# Ensure custom transformer classes are importable during unpickling
+import model_pipeline  # noqa: F401
 
-# Main title
+st.set_page_config(page_title="Crop Yield Prediction", page_icon="🌾", layout="wide")
+
+DATA_PATH = "crop_yield_dataset.csv"
+MODEL_PATH = "crop_yield_model.pkl"
+
+
+df = pd.read_csv(DATA_PATH)
+model = joblib.load(MODEL_PATH)
+
 st.title("🌾 Crop Yield Prediction")
-st.write("Welcome to the Crop Yield Prediction System!")
+st.write("Predict crop yield (tonnes/ha) from raw farm inputs.")
 
-# Sidebar
 st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Home", "Dataset Overview", "EDA Dashboard", "Prediction"])
 
-page = st.sidebar.radio(
-    "Go to",
-    ["Home", "Dataset Overview", "EDA Dashboard", "Model Performance", "Prediction"]
-)
-
-# Pages
 if page == "Home":
     st.header("🏠 Home")
-    st.write("This application predicts crop yield based on different agricultural factors.")
+    st.write("This app uses one serialized end-to-end pipeline for preprocessing and prediction.")
 
 elif page == "Dataset Overview":
     st.header("📊 Dataset Overview")
-
-    st.subheader("Dataset Information")
-
     col1, col2 = st.columns(2)
-
     with col1:
-        st.metric("Number of Rows", df.shape[0])
-
+        st.metric("Rows", df.shape[0])
     with col2:
-        st.metric("Number of Columns", df.shape[1])
+        st.metric("Columns", df.shape[1])
 
-    st.subheader("Dataset Preview")
+    st.subheader("Preview")
     st.dataframe(df.head(10), use_container_width=True)
 
-    st.subheader("Column Names")
-    st.write(list(df.columns))
+    st.subheader("Missing Values")
+    st.dataframe(df.isna().sum().rename("missing_count"))
 
 elif page == "EDA Dashboard":
-    st.header("📈 EDA Dashboard")
+    st.header("📈 EDA Dashboard (Pre-encoding)")
 
-    st.subheader("🌾 Average Crop Yield by Crop Type")
+    st.subheader("Average Yield by Crop Type")
+    st.bar_chart(df.groupby("Crop_Type", dropna=False)["Crop_Yield_tonnes_per_ha"].mean())
 
-    crop_yield = df.groupby("Crop_Type")["Crop_Yield_tonnes_per_ha"].mean()
+    st.subheader("Average Yield by Soil Type")
+    st.bar_chart(df.groupby("Soil_Type", dropna=False)["Crop_Yield_tonnes_per_ha"].mean())
 
-    st.bar_chart(crop_yield)
+    st.subheader("Average Yield by Irrigation")
+    st.bar_chart(df.groupby("Irrigation", dropna=False)["Crop_Yield_tonnes_per_ha"].mean())
 
-    st.subheader("🌱 Average Crop Yield by Soil Type")
-
-    soil_yield = df.groupby("Soil_Type")["Crop_Yield_tonnes_per_ha"].mean()
-
-    st.bar_chart(soil_yield)
-
-    st.subheader("💧 Average Crop Yield by Irrigation")
-
-    irrigation_yield = df.groupby("Irrigation")["Crop_Yield_tonnes_per_ha"].mean()
-
-    st.bar_chart(irrigation_yield)
-    st.subheader("🌧️ Rainfall vs Crop Yield")
-
-    st.scatter_chart(
-        df,
-        x="Rainfall_mm",
-        y="Crop_Yield_tonnes_per_ha"
-    )
-
-    st.subheader("🌡️ Temperature vs Crop Yield")
-
-    st.scatter_chart(
-        df,
-        x="Temperature_C",
-        y="Crop_Yield_tonnes_per_ha"
-    )
-
-    st.subheader("🧪 Fertilizer vs Crop Yield")
-
-    st.scatter_chart(
-        df,
-        x="Fertilizer_kg_per_ha",
-        y="Crop_Yield_tonnes_per_ha"
-    )
-
-elif page == "Model Performance":
-    st.header("🤖 Model Performance")
-
-    st.write(
-        "The following regression models were evaluated "
-        "for crop yield prediction:"
-    )
-
-    models = [
-        "Multiple Linear Regression",
-        "Polynomial Regression",
-        "Ridge Regression",
-        "Lasso Regression",
-        "ElasticNet Regression"
-    ]
-
-    for model in models:
-        st.write("✅", model)
-
-    st.subheader("📏 Evaluation Metrics")
-
-    st.write("The models were evaluated using:")
-
-    metrics = [
-        "MAE - Mean Absolute Error",
-        "MSE - Mean Squared Error",
-        "RMSE - Root Mean Squared Error",
-        "R² - R-squared"
-    ]
-
-    for metric in metrics:
-        st.write("•", metric)
+    st.subheader("Rainfall vs Crop Yield")
+    st.scatter_chart(df, x="Rainfall_mm", y="Crop_Yield_tonnes_per_ha")
 
 elif page == "Prediction":
     st.header("🔮 Crop Yield Prediction")
-    st.write("Enter the farm details below to predict crop yield.")
 
     col1, col2 = st.columns(2)
-
     with col1:
-        rainfall = st.number_input(
-            "🌧️ Rainfall (mm)",
-            min_value=0.0
-        )
-
-        temperature = st.number_input(
-            "🌡️ Temperature (°C)",
-            min_value=0.0
-        )
-
-        soil_ph = st.number_input(
-            "🌱 Soil pH",
-            min_value=0.0,
-            max_value=14.0,
-            value=7.0
-        )
-
-        fertilizer = st.number_input(
-            "🧪 Fertilizer (kg/ha)",
-            min_value=0.0
-        )
-
-        pesticide = st.number_input(
-            "🧴 Pesticide (kg/ha)",
-            min_value=0.0
-        )
+        rainfall = st.number_input("Rainfall (mm)", min_value=0.0, value=950.0)
+        temperature = st.number_input("Temperature (°C)", min_value=0.0, value=27.0)
+        soil_ph = st.number_input("Soil pH", min_value=0.0, max_value=14.0, value=6.5)
+        fertilizer = st.number_input("Fertilizer (kg/ha)", min_value=0.0, value=190.0)
+        pesticide = st.number_input("Pesticide (kg/ha)", min_value=0.0, value=4.0)
 
     with col2:
-        sunlight = st.number_input(
-            "☀️ Sunlight (hours/day)",
-            min_value=0.0
+        sunlight = st.number_input("Sunlight (hours/day)", min_value=0.0, value=8.0)
+        farm_size = st.number_input("Farm Size (ha)", min_value=0.0, value=60.0)
+        soil_type = st.selectbox("Soil Type", sorted(df["Soil_Type"].dropna().unique().tolist()))
+        crop_type = st.selectbox("Crop Type", sorted(df["Crop_Type"].dropna().unique().tolist()))
+        irrigation = st.selectbox("Irrigation", sorted(df["Irrigation"].dropna().unique().tolist()))
+
+    if st.button("Predict"):
+        input_data = pd.DataFrame(
+            {
+                "Soil_Type": [soil_type],
+                "Crop_Type": [crop_type],
+                "Rainfall_mm": [rainfall],
+                "Temperature_C": [temperature],
+                "Soil_pH": [soil_ph],
+                "Fertilizer_kg_per_ha": [fertilizer],
+                "Pesticide_kg_per_ha": [pesticide],
+                "Sunlight_Hours_per_day": [sunlight],
+                "Farm_Size_ha": [farm_size],
+                "Irrigation": [irrigation],
+            }
         )
 
-        farm_size = st.number_input(
-            "🚜 Farm Size (ha)",
-            min_value=0.0
-        )
-
-        soil_type = st.selectbox(
-            "🌱 Soil Type",
-            ["Loamy", "Peaty", "Sandy", "Silty"]
-        )
-
-        crop_type = st.selectbox(
-            "🌾 Crop Type",
-            ["Cotton", "Maize", "Rice", "Soybean", "Wheat"]
-        )
-
-        irrigation = st.selectbox(
-            "💧 Irrigation",
-            ["Yes", "No"]
-        )
-
-    if st.button("🔮 Predict Crop Yield"):
-
-        input_data = pd.DataFrame({
-            "Rainfall_mm": [rainfall],
-            "Temperature_C": [temperature],
-            "Soil_pH": [soil_ph],
-            "Fertilizer_kg_per_ha": [fertilizer],
-            "Pesticide_kg_per_ha": [pesticide],
-            "Sunlight_Hours_per_day": [sunlight],
-            "Farm_Size_ha": [farm_size],
-
-            "Soil_Type_Loamy": [1 if soil_type == "Loamy" else 0],
-            "Soil_Type_Peaty": [1 if soil_type == "Peaty" else 0],
-            "Soil_Type_Sandy": [1 if soil_type == "Sandy" else 0],
-            "Soil_Type_Silty": [1 if soil_type == "Silty" else 0],
-
-            "Crop_Type_Cotton": [1 if crop_type == "Cotton" else 0],
-            "Crop_Type_Maize": [1 if crop_type == "Maize" else 0],
-            "Crop_Type_Rice": [1 if crop_type == "Rice" else 0],
-            "Crop_Type_Soybean": [1 if crop_type == "Soybean" else 0],
-            "Crop_Type_Wheat": [1 if crop_type == "Wheat" else 0],
-
-            "Irrigation_Yes": [1 if irrigation == "Yes" else 0]
-        })
-
-        # Make prediction
-        prediction = model.predict(input_data)
-
-        # Get predicted value
-        predicted_yield = prediction[0]
-
-        # Display result
-        st.subheader("🌾 Prediction Result")
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            st.metric(
-                "Predicted Yield",
-                f"{predicted_yield:.2f} tonnes/ha"
-            )
-
-        with col2:
-            st.metric(
-                "Crop",
-                crop_type
-            )
-
-        with col3:
-            st.metric(
-                "Soil Type",
-                soil_type
-            )
-
-        st.success("✅ Prediction generated successfully!")
-        st.subheader("📋 Farm Details")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.write(f"🌧️ **Rainfall:** {rainfall} mm")
-            st.write(f"🌡️ **Temperature:** {temperature} °C")
-            st.write(f"🌱 **Soil pH:** {soil_ph}")
-            st.write(f"🧪 **Fertilizer:** {fertilizer} kg/ha")
-            st.write(f"🧴 **Pesticide:** {pesticide} kg/ha")
-
-        with col2:
-            st.write(f"☀️ **Sunlight:** {sunlight} hours/day")
-            st.write(f"🚜 **Farm Size:** {farm_size} ha")
-            st.write(f"🌱 **Soil Type:** {soil_type}")
-            st.write(f"🌾 **Crop Type:** {crop_type}")
-            st.write(f"💧 **Irrigation:** {irrigation}")
-            st.subheader("💡 Farming Suggestions")
-
-        if rainfall < 500:
-            st.write("🌧️ Rainfall is relatively low. Consider proper irrigation.")
-
-        elif rainfall > 2000:
-            st.write("🌧️ Rainfall is relatively high. Make sure the field has proper drainage.")
-
-        else:
-            st.write("🌧️ Rainfall level is within a moderate range.")
-
-        if soil_ph < 5.5:
-            st.write("🌱 Soil pH is acidic. Consider appropriate soil management.")
-
-        elif soil_ph > 7.5:
-            st.write("🌱 Soil pH is alkaline. Consider appropriate soil management.")
-
-        else:
-            st.write("🌱 Soil pH is within a moderate range.")
-
-        if irrigation == "No":
-            st.write("💧 Consider irrigation if rainfall is insufficient.")
-
-        else:
-            st.write("💧 Irrigation is available for this farm.")
-
-        if fertilizer == 0:
-            st.write("🧪 No fertilizer was entered. Consider following suitable fertilizer recommendations.")
-
-        else:
-            st.write("🧪 Fertilizer input has been provided.")
-        st.subheader("📥 Download Prediction Report")
-
-        report = f"""
-CROP YIELD PREDICTION REPORT
-============================
-
-FARM DETAILS
-------------
-Rainfall: {rainfall} mm
-Temperature: {temperature} °C
-Soil pH: {soil_ph}
-Fertilizer: {fertilizer} kg/ha
-Pesticide: {pesticide} kg/ha
-Sunlight: {sunlight} hours/day
-Farm Size: {farm_size} ha
-Soil Type: {soil_type}
-Crop Type: {crop_type}
-Irrigation: {irrigation}
-
-PREDICTION RESULT
------------------
-Predicted Crop Yield: {predicted_yield:.2f} tonnes/ha
-
-Generated by Crop Yield Prediction System
-"""
-
-        st.download_button(
-            label="📥 Download Report",
-            data=report,
-            file_name="crop_yield_prediction_report.txt",
-            mime="text/plain"
-        )
+        prediction = float(model.predict(input_data)[0])
+        st.metric("Predicted Yield", f"{prediction:.2f} tonnes/ha")
+        st.success("Prediction generated using the trained end-to-end pipeline.")
