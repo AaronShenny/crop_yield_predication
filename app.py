@@ -10,21 +10,9 @@ st.set_page_config(
 )
 
 # Load dataset, model, and scaler
-df = pd.read_csv("cleaned.csv")
+df = pd.read_csv("crop_yield_dataset.csv")
 model = joblib.load("crop_yield_model.pkl")
-scaler = joblib.load("scaler.pkl")   # once you've saved and added this file # <-- must be saved from the notebook (see note at bottom)
-
-# Columns that were standardized during training (must match the notebook exactly,
-# in the same order used when the scaler was fit)
-NUMERICAL_COLS = [
-    "Rainfall_mm",
-    "Temperature_C",
-    "Soil_pH",
-    "Fertilizer_kg_per_ha",
-    "Pesticide_kg_per_ha",
-    "Sunlight_Hours_per_day",
-    "Farm_Size_ha",
-]
+scaler = joblib.load("scaler.pkl")
 
 # Full feature order the model expects (must match X.columns from training)
 MODEL_FEATURE_ORDER = [
@@ -34,6 +22,14 @@ MODEL_FEATURE_ORDER = [
     "Crop_Type_Cotton", "Crop_Type_Maize", "Crop_Type_Rice",
     "Crop_Type_Soybean", "Crop_Type_Wheat", "Irrigation_Yes"
 ]
+
+# Columns that were standardized during training. In the notebook, the scaler
+# was fit on df.select_dtypes(include=np.number) minus the target -- that's
+# EVERY numeric column, including the 0/1 one-hot dummy columns, not just the
+# 7 continuous ones. Skipping the dummy columns here (as the original version
+# of this file did) feeds the model badly out-of-scale inputs and produces
+# meaningless predictions.
+NUMERICAL_COLS = MODEL_FEATURE_ORDER
 
 # Main title
 st.title("🌾 Crop Yield Prediction")
@@ -248,8 +244,10 @@ elif page == "Prediction":
         # Make prediction
         prediction = model.predict(input_data)
 
-        # Get predicted value
-        predicted_yield = prediction[0]
+        # Get predicted value (clamped at 0 -- the polynomial model can
+        # extrapolate to negative numbers for edge-case inputs, but yield
+        # can never actually be negative)
+        predicted_yield = max(prediction[0], 0.0)
 
         # Display result
         st.subheader("🌾 Prediction Result")
